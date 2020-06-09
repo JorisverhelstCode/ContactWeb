@@ -57,7 +57,7 @@ namespace ContactWeb.Controllers
         public IActionResult DeletePerson(int id, string returnUrl)
         {
             Person toBeDeletedPerson = _personsDatabase.GetPerson(id);
-            PersonDeleteViewModel toBeDeletedPersonView = new PersonDeleteViewModel
+            PeopleDeletePersonViewModel toBeDeletedPersonView = new PeopleDeletePersonViewModel
             {
                 ID = toBeDeletedPerson.ID,
                 FirstName = toBeDeletedPerson.FirstName,
@@ -68,15 +68,53 @@ namespace ContactWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeletePerson(PersonDeleteViewModel toBeDeletedPerson)
+        public IActionResult DeletePerson(PeopleDeletePersonViewModel toBeDeletedPerson)
         {
             _personsDatabase.Delete(toBeDeletedPerson.ID);
             return RedirectToAction("Index");
         }
 
-        public IActionResult EditPerson()
+        public IActionResult EditPerson(int id, string returnUrl)
         {
-            return View();
+            Person toBeEdittedPerson = _personsDatabase.GetPerson(id);
+            PeopleEditPersonViewModel toBeEdittedPersonView = new PeopleEditPersonViewModel
+            {
+                FirstName = toBeEdittedPerson.FirstName,
+                LastName = toBeEdittedPerson.LastName,
+                Adress = toBeEdittedPerson.Adress,
+                PhoneNumber = toBeEdittedPerson.PhoneNumber,
+                DateOfBirth = toBeEdittedPerson.DateOfBirth,
+                Description = toBeEdittedPerson.Description,
+                Email = toBeEdittedPerson.Email,
+                ID = toBeEdittedPerson.ID,
+                ReturnUrl = returnUrl
+            };
+            return View(toBeEdittedPersonView);
+        }
+
+        [HttpPost]
+        public IActionResult EditPerson(PeopleEditPersonViewModel toBeEdittedPerson)
+        {
+            if (!TryValidateModel(toBeEdittedPerson))
+            {
+                return View(toBeEdittedPerson);
+            }
+            else
+            {
+                Person person = new Person
+                {
+                    FirstName = toBeEdittedPerson.FirstName,
+                    LastName = toBeEdittedPerson.LastName,
+                    DateOfBirth = toBeEdittedPerson.DateOfBirth,
+                    Adress = toBeEdittedPerson.Adress,
+                    Description = toBeEdittedPerson.Description,
+                    PhoneNumber = toBeEdittedPerson.PhoneNumber,
+                    Email = toBeEdittedPerson.Email
+                };
+
+                _personsDatabase.Update(toBeEdittedPerson.ID, person);
+                return RedirectToAction(toBeEdittedPerson.ReturnUrl, new { id = toBeEdittedPerson.ID });
+            }
         }
 
         public IActionResult PersonDetails()

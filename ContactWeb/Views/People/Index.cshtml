@@ -15,8 +15,9 @@
             <span>
                 @item.FirstName @item.LastName
                 <a asp-controller="People" asp-action="PersonDetails" asp-route-id="@item.ID">Detail</a>
-                <a asp-controller="People" asp-action="EditPerson" asp-route-id="@item.ID">Edit</a>
+                <a asp-controller="People" asp-action="EditPerson" asp-route-id="@item.ID" asp-route-returnUrl="Index">Edit</a>
                 <a asp-controller="People" asp-action="DeletePerson" asp-route-id="@item.ID" asp-route-returnUrl="Index">Delete</a>
+                <br />
             </span>
         }
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ContactWeb.Models
 {
-    public class PersonDeleteViewModel
+    public class PeopleDeletePersonViewModel
     {
         public int ID { get; set; }
         public string FirstName { get; set; }
