@@ -117,9 +117,20 @@ namespace ContactWeb.Controllers
             }
         }
 
-        public IActionResult PersonDetails()
+        public IActionResult PersonDetails(int id)
         {
-            return View();
+            Person person = _personsDatabase.GetPerson(id);
+            PeoplePersonDetailsViewModel ppdvm = new PeoplePersonDetailsViewModel
+            {
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                DateOfBirth = person.DateOfBirth,
+                Adress = person.Adress,
+                Description = person.Description,
+                PhoneNumber = person.PhoneNumber,
+                Email = person.Email
+            };
+            return View(ppdvm);
         }
 
         public List<PeopleIndexViewModel> CreateList()

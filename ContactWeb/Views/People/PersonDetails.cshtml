@@ -1,0 +1,41 @@
+﻿@model PeoplePersonDetailsViewModel
+
+<h1>Personal details of @Model.FirstName @Model.LastName</h1>
+
+<strong>First Name:</strong>
+<br />
+<p>@Model.FirstName</p>
+
+<strong>Last Name:</strong>
+<br />
+<p>@Model.LastName</p>
+
+<strong>Adress:</strong>
+<br />
+<p>@Model.Adress</p>
+
+<strong>Email:</strong>
+<br />
+<p>@Model.Email</p>
+
+<strong>Phone number:</strong>
+<br />
+<p>@Model.PhoneNumber</p>
+
+<strong>Age:</strong>
+<br />
+<p>@CalculateAge()</p>
+
+<strong>Description:</strong>
+<br />
+<p>@Model.Description</p>
+
+<a asp-controller="People" asp-action="EditPerson" asp-route-id="@Model.ID" asp-route-returnUrl="PersonDetails">Edit</a>
+<a asp-controller="People" asp-action="DeletePerson" asp-route-id="@Model.ID" asp-route-returnUrl="PersonDetails">Delete</a>
+
+@functions {
+    int CalculateAge()
+    {
+        return Model.DateOfBirth.Year - DateTime.Now.Year;
+    }
+ }
