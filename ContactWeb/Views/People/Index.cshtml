@@ -1,0 +1,28 @@
+﻿@model IEnumerable<PeopleIndexViewModel>
+
+<div>
+    These people work for our glorious organisation!<br />
+</div>
+<div>
+    @if (!Model.Any())
+    {
+        <span>There is currently no one at work here :'(</span>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <span>
+                @item.FirstName @item.LastName
+                <a asp-controller="People" asp-action="PersonDetails" asp-route-id="@item.ID">Detail</a>
+                <a asp-controller="People" asp-action="EditPerson" asp-route-id="@item.ID">Edit</a>
+                <a asp-controller="People" asp-action="DeletePerson" asp-route-id="@item.ID" asp-route-returnUrl="Index">Delete</a>
+            </span>
+        }
+    }
+</div>
+<div>
+    <br />
+    <a asp-controller="People" asp-action="CreateNewPerson">Create new person</a>
+</div>
+

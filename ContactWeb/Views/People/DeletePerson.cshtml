@@ -1,0 +1,9 @@
+﻿@model PersonDeleteViewModel
+
+<span>
+    Are You sure you want to delete @Model.FirstName @Model.LastName?
+</span>
+<form asp-controller="People" asp-action="DeletePerson" asp-route-id="@Model.ID" method="post">
+    <button type="submit" class="btn-danger">Yes</button>
+    <a asp-controller="People" asp-action="@Model.ReturnUrl" asp-route-id="@Model.ID">No</a>
+</form>
