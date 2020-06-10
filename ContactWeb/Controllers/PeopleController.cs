@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ContactWeb.Database;
 using ContactWeb.Domain;
 using ContactWeb.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,12 @@ namespace ContactWeb.Controllers
     public class PeopleController : Controller
     {
         private readonly IPeopleDatabase _personsDatabase;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public PeopleController(IPeopleDatabase db)
+        public PeopleController(IPeopleDatabase db, IWebHostEnvironment hostingEnvironment)
         {
             _personsDatabase = db;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -38,6 +42,14 @@ namespace ContactWeb.Controllers
                 return View(createdPerson);
             } else
             {
+                string uniqueFileName = null;
+                if (createdPerson.Avatar != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + createdPerson.Avatar.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    createdPerson.Avatar.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
                 Person person = new Person
                 {
                     FirstName = createdPerson.FirstName,
@@ -46,7 +58,8 @@ namespace ContactWeb.Controllers
                     Adress = createdPerson.Adress,
                     Description = createdPerson.Description,
                     PhoneNumber = createdPerson.PhoneNumber,
-                    Email = createdPerson.Email
+                    Email = createdPerson.Email,
+                    AvatarPath = uniqueFileName
                 };
 
                 _personsDatabase.Insert(person);
