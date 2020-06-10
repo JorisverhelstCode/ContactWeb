@@ -1,8 +1,12 @@
 ﻿@model PeoplePersonDetailsViewModel
 
+@{
+    var avatarPath = "~/Images/" + Model.AvatarPath ?? "noImage.jpg";
+}
+
 <h1>Personal details of @Model.FirstName @Model.LastName</h1>
 
-<img src="@Model.Avatar"/>
+<img class="card-img-top" src="@avatarPath" />
 
 <strong>First Name:</strong>
 <br />
@@ -40,4 +44,5 @@
     {
         return Model.DateOfBirth.Year - DateTime.Now.Year;
     }
- }
+}
+

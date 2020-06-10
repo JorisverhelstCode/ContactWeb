@@ -23,9 +23,9 @@ namespace ContactWeb.Models
         [MaxLength(30, ErrorMessage = "It's long enough now")]
         public string LastName { get; set; }
 
-        [DisplayName("Age")]
+        [DisplayName("Birthday")]
         [Required]
-        [Range(1900,2020)]
+        [Range(typeof(DateTime), "01/10/1900", "01/12/2019")]
         public DateTime DateOfBirth { get; set; }
 
         [DisplayName("Phone number")]

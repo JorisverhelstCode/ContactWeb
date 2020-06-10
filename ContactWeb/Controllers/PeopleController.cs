@@ -100,7 +100,8 @@ namespace ContactWeb.Controllers
                 Description = toBeEdittedPerson.Description,
                 Email = toBeEdittedPerson.Email,
                 ID = toBeEdittedPerson.ID,
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                AvatarUrl = toBeEdittedPerson.AvatarPath
             };
             return View(toBeEdittedPersonView);
         }
