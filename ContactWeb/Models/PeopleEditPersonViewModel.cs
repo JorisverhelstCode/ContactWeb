@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ContactWeb.Domain;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,6 +32,10 @@ namespace ContactWeb.Models
 
         [MaxLength(300, ErrorMessage = "We ran out of server space to store more info!")]
         public string Description { get; set; }
+
+        public Category Category { get; set; }
+
+        public IFormFile Avatar { get; set; }
 
         public int ID { get; set; }
 
