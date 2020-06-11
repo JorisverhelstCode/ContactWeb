@@ -44,15 +44,15 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="Category"></label>
-            <input class="form-control" asp-for="Category" />
-            <span class="dropdown" asp-validation-for="Category"></span>
+            <label asp-for="Categories"></label>
+            <select asp-for="Categories" asp-items="@Model.Categories" class="form-control"></select>
+            <span class="text-danger" asp-validation-for="Categories"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Avatar"></label>
-            <input class="form-control custom-file-input" asp-for="Avatar" />
-            <span class="text-danger custom-file-label" asp-validation-for="Avatar">Choose File...</span>
+            <input asp-for="Avatar" class="form-control" />
+            <span class="text-danger" asp-validation-for="Avatar"></span>
         </div>
 
         <button class="btn btn-primary" type="submit">Create Person</button>

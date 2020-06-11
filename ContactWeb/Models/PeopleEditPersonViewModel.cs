@@ -1,5 +1,6 @@
 ﻿using ContactWeb.Domain;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,7 +44,13 @@ namespace ContactWeb.Models
         public string Description { get; set; }
 
         [DisplayName("Categorie")]
-        public Category Category { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; } = new List<SelectListItem>()
+        {
+            new SelectListItem(){Text = "Family", Value = "Family"},
+            new SelectListItem(){Text = "Colleague", Value = "Colleague"},
+            new SelectListItem(){Text = "Friend", Value = "Friend"},
+            new SelectListItem(){Text = "Enemy", Value = "Enemy"},
+        };
 
         [DisplayName("Foto")]
         public IFormFile Avatar { get; set; }
