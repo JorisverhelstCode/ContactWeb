@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ContactWeb.Database;
 using ContactWeb.Domain;
 using ContactWeb.Models;
+using ContactWeb.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace ContactWeb.Controllers
     {
         private readonly IPeopleDatabase _personsDatabase;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly PhotoService _photoService;
 
         public PeopleController(IPeopleDatabase db, IWebHostEnvironment hostingEnvironment)
         {
@@ -129,6 +131,23 @@ namespace ContactWeb.Controllers
                     Email = toBeEdittedPerson.Email
                 };
 
+                Person personFromDB = _personsDatabase.GetPerson(toBeEdittedPerson.ID);
+
+                if (toBeEdittedPerson.Avatar == null)
+                {
+                    person.AvatarPath = personFromDB.AvatarPath;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(personFromDB.AvatarPath))
+                    {
+                        _photoService.DeletePicture(_hostingEnvironment.WebRootPath, personFromDB.AvatarPath);
+                    }
+
+                    string uniqueFileName = UploadContactPhoto(toBeEdittedPerson.Avatar);
+                    person.AvatarPath = "/photos/" + uniqueFileName;
+                }
+
                 _personsDatabase.Update(toBeEdittedPerson.ID, person);
                 return RedirectToAction(toBeEdittedPerson.ReturnUrl, new { id = toBeEdittedPerson.ID });
             }
@@ -159,6 +178,20 @@ namespace ContactWeb.Controllers
                 people.Add(new PeopleIndexViewModel() { FirstName = person.FirstName, LastName = person.LastName, ID = person.ID });
             }
             return people;
+        }
+
+        private string UploadContactPhoto(IFormFile photo)
+        {
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+            string pathName = Path.Combine(_hostingEnvironment.WebRootPath, "photos");
+            string fileNameWithPath = Path.Combine(pathName, uniqueFileName);
+
+            using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+            {
+                photo.CopyTo(stream);
+            }
+
+            return uniqueFileName;
         }
     }
 }
