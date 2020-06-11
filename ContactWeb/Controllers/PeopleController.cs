@@ -33,6 +33,7 @@ namespace ContactWeb.Controllers
         public IActionResult CreateNewPerson()
         {
             PeopleCreateNewPersonViewModel pcnpvm = new PeopleCreateNewPersonViewModel();
+            pcnpvm.DateOfBirth = new DateTime(1990, 1, 1);
             return View(pcnpvm);
         }
 
@@ -44,17 +45,7 @@ namespace ContactWeb.Controllers
                 return View(createdPerson);
             } else
             {
-                string uniqueFileName = null;
-                if (createdPerson.Avatar != null)
-                {
-                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + createdPerson.Avatar.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        createdPerson.Avatar.CopyTo(stream);
-                    }
-                }
+                
                 Person person = new Person
                 {
                     FirstName = createdPerson.FirstName,
@@ -64,8 +55,13 @@ namespace ContactWeb.Controllers
                     Description = createdPerson.Description,
                     PhoneNumber = createdPerson.PhoneNumber,
                     Email = createdPerson.Email,
-                    AvatarPath = uniqueFileName
                 };
+
+                if (createdPerson.Avatar != null)
+                {
+                    string uniqueFileName = UploadContactPhoto(createdPerson.Avatar);
+                    person.AvatarPath = "/photos/" + uniqueFileName;
+                }
 
                 _personsDatabase.Insert(person);
                 return RedirectToAction("Index");

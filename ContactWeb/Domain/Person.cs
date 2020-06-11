@@ -17,6 +17,6 @@ namespace ContactWeb.Domain
         public string Description { get; set; }
         public int ID { get; set; }
         public string AvatarPath { get; set; }
-        public Category Category { get; set; }
+        public string Category { get; set; }
     }
 }
