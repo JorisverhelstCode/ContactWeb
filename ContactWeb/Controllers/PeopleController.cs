@@ -23,6 +23,7 @@ namespace ContactWeb.Controllers
         {
             _personsDatabase = db;
             _hostingEnvironment = hostingEnvironment;
+            _photoService = new PhotoService();
         }
 
         public IActionResult Index()
@@ -179,7 +180,7 @@ namespace ContactWeb.Controllers
         private string UploadContactPhoto(IFormFile photo)
         {
             string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
-            string pathName = Path.Combine(_hostingEnvironment.WebRootPath, "photos");
+            string pathName = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
             string fileNameWithPath = Path.Combine(pathName, uniqueFileName);
 
             using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
