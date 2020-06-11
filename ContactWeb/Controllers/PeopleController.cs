@@ -45,10 +45,13 @@ namespace ContactWeb.Controllers
                 string uniqueFileName = null;
                 if (createdPerson.Avatar != null)
                 {
-                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
                     uniqueFileName = Guid.NewGuid().ToString() + "_" + createdPerson.Avatar.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    createdPerson.Avatar.CopyTo(new FileStream(filePath, FileMode.Create));
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        createdPerson.Avatar.CopyTo(stream);
+                    }
                 }
                 Person person = new Person
                 {

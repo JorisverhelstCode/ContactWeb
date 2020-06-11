@@ -42,7 +42,7 @@
 @functions {
     int CalculateAge()
     {
-        return Model.DateOfBirth.Year - DateTime.Now.Year;
+        return DateTime.Now.Year - Model.DateOfBirth.Year;
     }
 }
 
